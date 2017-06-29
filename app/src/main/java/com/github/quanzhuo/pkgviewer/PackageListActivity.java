@@ -3,21 +3,26 @@ package com.github.quanzhuo.pkgviewer;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class PackageListActivity extends AppCompatActivity {
     private ListView mListView;
     private BaseAdapter mAdapter;
     private int mItemCount;
-    private List<PackageInfo> packageList;
+    private List<PackageInfo> mPkgList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,8 +30,8 @@ public class PackageListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_package_list);
 
         mListView = (ListView) findViewById(R.id.AppList);
-        packageList = getPackageManager().getInstalledPackages(0);
-        mItemCount = packageList.size();
+        mPkgList = getNonSysPackages();
+        mItemCount = mPkgList.size();
 
         mAdapter = new BaseAdapter() {
             @Override
@@ -46,16 +51,16 @@ public class PackageListActivity extends AppCompatActivity {
 
             @Override
             public View getView(int i, View view, ViewGroup viewGroup) {
-                PackageInfo packInfo = packageList.get(i);
+                PackageInfo packInfo = mPkgList.get(i);
                 ApplicationInfo appInfo = packInfo.applicationInfo;
                 PackageManager manager = getPackageManager();
                 View layout = getLayoutInflater().inflate(R.layout.package_list_item, null);
 
-                ImageView appIcon = (ImageView) layout.findViewById(R.id.app_icon);
+                ImageView appIcon = layout.findViewById(R.id.app_icon);
                 appIcon.setImageDrawable(appInfo.loadIcon(manager));
-                TextView appLabel = (TextView) layout.findViewById(R.id.app_label);
+                TextView appLabel = layout.findViewById(R.id.app_label);
                 appLabel.setText(appInfo.loadLabel(manager));
-                TextView appPackageName = (TextView) layout.findViewById(R.id.package_name);
+                TextView appPackageName = layout.findViewById(R.id.package_name);
                 appPackageName.setText(appInfo.packageName);
 
                 return layout;
@@ -63,5 +68,42 @@ public class PackageListActivity extends AppCompatActivity {
         };
 
         mListView.setAdapter(mAdapter);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int menu_id = item.getItemId();
+        switch (menu_id) {
+            case R.id.show_sys_item:
+                item.setChecked(!item.isChecked());
+                if (item.isChecked())
+                    mPkgList = getPackageManager().getInstalledPackages(0);
+                else
+                    mPkgList = getNonSysPackages();
+                mItemCount = mPkgList.size();
+                mAdapter.notifyDataSetChanged();
+                Toast.makeText(this, mItemCount + " Apps in Total", Toast.LENGTH_SHORT).show();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private ArrayList<PackageInfo> getNonSysPackages() {
+        List<PackageInfo> allApps = getPackageManager().getInstalledPackages(0);
+        ArrayList<PackageInfo> nonSysApps = new ArrayList<>();
+        for (PackageInfo info : allApps) {
+            if (!isSystemApp(info))
+                nonSysApps.add(info);
+        }
+        return nonSysApps;
+    }
+
+    private boolean isSystemApp(PackageInfo pkgInfo) {
+        return (pkgInfo.applicationInfo.flags & pkgInfo.applicationInfo.FLAG_SYSTEM) == 1;
     }
 }
