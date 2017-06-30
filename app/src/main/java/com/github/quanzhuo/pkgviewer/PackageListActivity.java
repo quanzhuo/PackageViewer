@@ -1,5 +1,6 @@
 package com.github.quanzhuo.pkgviewer;
 
+import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -9,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -23,6 +25,8 @@ public class PackageListActivity extends AppCompatActivity {
     private BaseAdapter mAdapter;
     private int mItemCount;
     private List<PackageInfo> mPkgList;
+
+    public static final String PKG_INFO_KEY = "com.github.quanzhuo.pkgviewer.pkg_info_key";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +72,15 @@ public class PackageListActivity extends AppCompatActivity {
         };
 
         mListView.setAdapter(mAdapter);
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                PackageInfo info = mPkgList.get(i);
+                Intent intent = new Intent(PackageListActivity.this, PackageOverviewActivity.class);
+                intent.putExtra(PKG_INFO_KEY, info);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override

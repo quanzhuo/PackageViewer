@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Package Viewer</string>
     <string name="show_sys_item">Show All</string>
+    <string name="pkg_overview">Overview</string>
 </resources>
