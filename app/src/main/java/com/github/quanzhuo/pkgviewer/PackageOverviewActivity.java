@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -54,6 +55,8 @@ public class PackageOverviewActivity extends AppCompatActivity {
             case INSTALL_LOCATION_PREFER_EXTERNAL:
                 location = "preferExternal";
                 break;
+            default:
+                location = "default";
         }
         return location;
     }

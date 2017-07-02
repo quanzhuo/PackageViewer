@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,6 +39,7 @@ public class PackageListActivity extends AppCompatActivity {
         mItemCount = mPkgList.size();
 
         mAdapter = new BaseAdapter() {
+            private PackageManager manager = getPackageManager();
             @Override
             public int getCount() {
                 return mItemCount;
@@ -54,20 +56,26 @@ public class PackageListActivity extends AppCompatActivity {
             }
 
             @Override
-            public View getView(int i, View view, ViewGroup viewGroup) {
-                PackageInfo packInfo = mPkgList.get(i);
-                ApplicationInfo appInfo = packInfo.applicationInfo;
-                PackageManager manager = getPackageManager();
-                View layout = getLayoutInflater().inflate(R.layout.package_list_item, null);
+            public View getView(int i, View convertView, ViewGroup viewGroup) {
+                PackageInfo packageInfo = mPkgList.get(i);
+                ApplicationInfo appInfo = packageInfo.applicationInfo;
+                ViewHolder holder;
 
-                ImageView appIcon = layout.findViewById(R.id.app_icon);
-                appIcon.setImageDrawable(appInfo.loadIcon(manager));
-                TextView appLabel = layout.findViewById(R.id.app_label);
-                appLabel.setText(appInfo.loadLabel(manager));
-                TextView appPackageName = layout.findViewById(R.id.package_name);
-                appPackageName.setText(appInfo.packageName);
+                if (convertView == null) {
+                    convertView = (LinearLayout) getLayoutInflater().inflate(R.layout.package_list_item, null);
+                    holder = new ViewHolder();
+                    holder.appIcon = convertView.findViewById(R.id.app_icon);
+                    holder.appLabel = convertView.findViewById(R.id.app_label);
+                    holder.appPackageName = convertView.findViewById(R.id.package_name);
+                    convertView.setTag(holder);
+                } else {
+                    holder = (ViewHolder) convertView.getTag();
+                }
+                holder.appIcon.setImageDrawable(appInfo.loadIcon(manager));
+                holder.appLabel.setText(appInfo.loadLabel(manager));
+                holder.appPackageName.setText(appInfo.packageName);
 
-                return layout;
+                return convertView;
             }
         };
 
@@ -81,6 +89,12 @@ public class PackageListActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    static class ViewHolder {
+        ImageView appIcon;
+        TextView appLabel;
+        TextView appPackageName;
     }
 
     @Override
