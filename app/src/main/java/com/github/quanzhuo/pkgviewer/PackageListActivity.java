@@ -40,6 +40,7 @@ public class PackageListActivity extends AppCompatActivity {
 
         mAdapter = new BaseAdapter() {
             private PackageManager manager = getPackageManager();
+
             @Override
             public int getCount() {
                 return mItemCount;
