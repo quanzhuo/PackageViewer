@@ -12,12 +12,21 @@
         <activity android:name=".PackageListActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
+
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
         <activity
             android:name=".PackageOverviewActivity"
             android:label="@string/pkg_overview">
+        </activity>
+        <activity android:name=".AllActivities">
+        </activity>
+        <activity android:name=".AllServices">
+        </activity>
+        <activity android:name=".AllReceivers">
+        </activity>
+        <activity android:name=".AllProviders">
         </activity>
     </application>
 

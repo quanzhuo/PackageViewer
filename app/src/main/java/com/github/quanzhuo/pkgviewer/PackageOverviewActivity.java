@@ -10,6 +10,7 @@ import android.content.pm.ServiceInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -22,6 +23,10 @@ import static android.content.pm.PackageInfo.INSTALL_LOCATION_INTERNAL_ONLY;
 import static android.content.pm.PackageInfo.INSTALL_LOCATION_PREFER_EXTERNAL;
 
 public class PackageOverviewActivity extends AppCompatActivity {
+    ActivityInfo[] activityInfos = new ActivityInfo[0];
+    ServiceInfo[] serviceInfos = new ServiceInfo[0];
+    ActivityInfo[] receiverInfos = new ActivityInfo[0];
+    ProviderInfo[] providerInfos = new ProviderInfo[0];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +34,7 @@ public class PackageOverviewActivity extends AppCompatActivity {
         setContentView(R.layout.activity_package_overview);
 
         Intent intent = getIntent();
-        PackageInfo pkgInfo = intent.getExtras().getParcelable(PackageListActivity.PKG_INFO_KEY);
+        final PackageInfo pkgInfo = intent.getExtras().getParcelable(PackageListActivity.PKG_INFO_KEY);
         ApplicationInfo appInfo = pkgInfo.applicationInfo;
 
         ImageView appIcon = (ImageView) findViewById(R.id.app_icon);
@@ -86,7 +91,7 @@ public class PackageOverviewActivity extends AppCompatActivity {
         TextView activities = (TextView) findViewById(R.id.overview_activities);
         TextView services = (TextView) findViewById(R.id.overview_services);
         TextView receivers = (TextView) findViewById(R.id.overview_receivers);
-        TextView providers = (TextView) findViewById(R.id.overview_providers);
+        final TextView providers = (TextView) findViewById(R.id.overview_providers);
 
         PackageManager manager = getPackageManager();
 
@@ -94,11 +99,6 @@ public class PackageOverviewActivity extends AppCompatActivity {
         int serviceCount = 0;
         int receiverCount = 0;
         int providerCount = 0;
-
-        ActivityInfo[] activityInfos = new ActivityInfo[0];
-        ServiceInfo[] serviceInfos = new ServiceInfo[0];
-        ActivityInfo[] receiverInfos = new ActivityInfo[0];
-        ProviderInfo[] providerInfos = new ProviderInfo[0];
 
         try {
             activityInfos = manager.getPackageInfo(pkgInfo.packageName, PackageManager.GET_ACTIVITIES).activities;
@@ -110,15 +110,47 @@ public class PackageOverviewActivity extends AppCompatActivity {
         }
         if (activityInfos != null) {
             activityCount = activityInfos.length;
+            activities.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent activitiesList = new Intent(PackageOverviewActivity.this, AllActivities.class);
+                    activitiesList.putExtra("packageName", pkgInfo.packageName);
+                    startActivity(activitiesList);
+                }
+            });
         }
         if (serviceInfos != null) {
             serviceCount = serviceInfos.length;
+            services.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent servicesList = new Intent(PackageOverviewActivity.this, AllServices.class);
+                    servicesList.putExtra("packageName", pkgInfo.packageName);
+                    startActivity(servicesList);
+                }
+            });
         }
         if (receiverInfos != null) {
             receiverCount = receiverInfos.length;
+            receivers.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent receiversList = new Intent(PackageOverviewActivity.this, AllReceivers.class);
+                    receiversList.putExtra("packageName", pkgInfo.packageName);
+                    startActivity(receiversList);
+                }
+            });
         }
         if (providerInfos != null) {
             providerCount = providerInfos.length;
+            providers.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent providersList = new Intent(PackageOverviewActivity.this, AllProviders.class);
+                    providersList.putExtra("packageName", pkgInfo.packageName);
+                    startActivity(providersList);
+                }
+            });
         }
 
         activities.setText(activityCount + "");
