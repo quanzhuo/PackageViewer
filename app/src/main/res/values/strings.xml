@@ -2,4 +2,8 @@
     <string name="app_name">Package Viewer</string>
     <string name="show_sys_item">Show All</string>
     <string name="pkg_overview">Overview</string>
+    <string name="all_activities">All Activities</string>
+    <string name="all_services">All Services</string>
+    <string name="all_receivers">All Receivers</string>
+    <string name="all_providers">All Providers</string>
 </resources>

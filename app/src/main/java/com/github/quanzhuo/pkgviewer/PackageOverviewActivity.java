@@ -77,7 +77,7 @@ public class PackageOverviewActivity extends AppCompatActivity {
         textView = (TextView) findViewById(R.id.overview_datadir);
         textView.setText(appInfo.dataDir);
         textView = (TextView) findViewById(R.id.overview_minSdkVersion);
-        textView.setText(appInfo.minSdkVersion + "");
+        textView.setText(Build.VERSION.SDK_INT >= 24 ? appInfo.minSdkVersion + "" : "N/A");
         textView = (TextView) findViewById(R.id.overview_nativeLibraryDir);
         textView.setText(appInfo.nativeLibraryDir);
         textView = (TextView) findViewById(R.id.overview_publicSourceDir);

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.github.quanzhuo.pkgviewer">
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.github.quanzhuo.pkgviewer">
 
     <application
         android:allowBackup="true"
@@ -12,7 +13,6 @@
         <activity android:name=".PackageListActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
-
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
@@ -20,13 +20,21 @@
             android:name=".PackageOverviewActivity"
             android:label="@string/pkg_overview">
         </activity>
-        <activity android:name=".AllActivities">
+        <activity
+            android:name=".AllActivities"
+            android:label="@string/all_activities">
         </activity>
-        <activity android:name=".AllServices">
+        <activity
+            android:name=".AllServices"
+            android:label="@string/all_services">
         </activity>
-        <activity android:name=".AllReceivers">
+        <activity
+            android:name=".AllReceivers"
+            android:label="@string/all_receivers">
         </activity>
-        <activity android:name=".AllProviders">
+        <activity
+            android:name=".AllProviders"
+            android:label="@string/all_providers">
         </activity>
     </application>
 
