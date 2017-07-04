@@ -1,16 +1,22 @@
 package com.github.quanzhuo.pkgviewer;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.ProviderInfo;
+import android.content.pm.ServiceInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+
 import static android.content.pm.PackageInfo.INSTALL_LOCATION_AUTO;
 import static android.content.pm.PackageInfo.INSTALL_LOCATION_INTERNAL_ONLY;
 import static android.content.pm.PackageInfo.INSTALL_LOCATION_PREFER_EXTERNAL;
@@ -75,6 +81,50 @@ public class PackageOverviewActivity extends AppCompatActivity {
         textView.setText(appInfo.sharedLibraryFiles != null ? appInfo.sharedLibraryFiles.toString() : null);
         textView = (TextView) findViewById(R.id.overview_sourceDir);
         textView.setText(appInfo.sourceDir);
+
+        // For activity
+        TextView activities = (TextView) findViewById(R.id.overview_activities);
+        TextView services = (TextView) findViewById(R.id.overview_services);
+        TextView receivers = (TextView) findViewById(R.id.overview_receivers);
+        TextView providers = (TextView) findViewById(R.id.overview_providers);
+
+        PackageManager manager = getPackageManager();
+
+        int activityCount = 0;
+        int serviceCount = 0;
+        int receiverCount = 0;
+        int providerCount = 0;
+
+        ActivityInfo[] activityInfos = new ActivityInfo[0];
+        ServiceInfo[] serviceInfos = new ServiceInfo[0];
+        ActivityInfo[] receiverInfos = new ActivityInfo[0];
+        ProviderInfo[] providerInfos = new ProviderInfo[0];
+
+        try {
+            activityInfos = manager.getPackageInfo(pkgInfo.packageName, PackageManager.GET_ACTIVITIES).activities;
+            serviceInfos = manager.getPackageInfo(pkgInfo.packageName, PackageManager.GET_SERVICES).services;
+            receiverInfos = manager.getPackageInfo(pkgInfo.packageName, PackageManager.GET_RECEIVERS).receivers;
+            providerInfos = manager.getPackageInfo(pkgInfo.packageName, PackageManager.GET_PROVIDERS).providers;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        if (activityInfos != null) {
+            activityCount = activityInfos.length;
+        }
+        if (serviceInfos != null) {
+            serviceCount = serviceInfos.length;
+        }
+        if (receiverInfos != null) {
+            receiverCount = receiverInfos.length;
+        }
+        if (providerInfos != null) {
+            providerCount = providerInfos.length;
+        }
+
+        activities.setText(activityCount + "");
+        services.setText(serviceCount + "");
+        receivers.setText(receiverCount + "");
+        providers.setText(providerCount + "");
     }
 
     private String getInstallLocation(int flag) {
