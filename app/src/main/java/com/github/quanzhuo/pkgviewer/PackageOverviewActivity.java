@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.BaseAdapter;
 import android.widget.ListView;
 
 import com.github.quanzhuo.model.BaseItem;
@@ -30,10 +31,10 @@ import static android.content.pm.PackageInfo.INSTALL_LOCATION_INTERNAL_ONLY;
 import static android.content.pm.PackageInfo.INSTALL_LOCATION_PREFER_EXTERNAL;
 
 public class PackageOverviewActivity extends AppCompatActivity {
-    private ActivityInfo[] activityInfos = new ActivityInfo[0];
-    private ServiceInfo[] serviceInfos = new ServiceInfo[0];
-    private ActivityInfo[] receiverInfos = new ActivityInfo[0];
-    private ProviderInfo[] providerInfos = new ProviderInfo[0];
+    private ActivityInfo[] activityInfos;
+    private ServiceInfo[] serviceInfos;
+    private ActivityInfo[] receiverInfos;
+    private ProviderInfo[] providerInfos;
 
     private ArrayList<BaseItem> mListViewData;
     private OverViewAdapter mOverViewAdapter;
@@ -75,8 +76,38 @@ public class PackageOverviewActivity extends AppCompatActivity {
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                KeyValuePair pair = (KeyValuePair) mListViewData.get(i);
-                switch (pair.getLabel()) {
+                BaseItem item = mListViewData.get(i);
+                Intent intent = null;
+                if (item instanceof KeyValuePair) {
+                    switch (((KeyValuePair) item).getDetails()) {
+                        case KeyValuePair.ACTIVITY:
+                            if (activityInfos != null) {
+                                intent = new Intent(PackageOverviewActivity.this, AllActivities.class);
+                                intent.putExtra("packageName", mPackageInfo.packageName);
+                                startActivity(intent);
+                            }
+                            break;
+                        case KeyValuePair.SERVICE:
+                            if (serviceInfos != null) {
+                                intent = new Intent(PackageOverviewActivity.this, AllServices.class);
+                                intent.putExtra("packageName", mPackageInfo.packageName);
+                                startActivity(intent);
+                            }
+                            break;
+                        case KeyValuePair.RECIVER:
+                            if (receiverInfos != null) {
+                                intent = new Intent(PackageOverviewActivity.this, AllReceivers.class);
+                                intent.putExtra("packageName", mPackageInfo.packageName);
+                                startActivity(intent);
+                            }
+                            break;
+                        case KeyValuePair.PROVIDER:
+                            if (providerInfos != null) {
+                                intent = new Intent(PackageOverviewActivity.this, AllProviders.class);
+                                intent.putExtra("packageName", mPackageInfo.packageName);
+                                startActivity(intent);
+                            }
+                    }
                 }
             }
         });
@@ -249,6 +280,11 @@ public class PackageOverviewActivity extends AppCompatActivity {
             public String getValue() {
                 return activityInfos == null ? "0" : activityInfos.length + "";
             }
+
+            @Override
+            public int getDetails() {
+                return ACTIVITY;
+            }
         });
         mListViewData.add(new Divider());
         mListViewData.add(new Section("Services"));
@@ -258,6 +294,11 @@ public class PackageOverviewActivity extends AppCompatActivity {
             public String getValue() {
                 return serviceInfos == null ? "0" : serviceInfos.length + "";
             }
+
+            @Override
+            public int getDetails() {
+                return SERVICE;
+            }
         });
         mListViewData.add(new Divider());
         mListViewData.add(new Section("receivers"));
@@ -266,6 +307,11 @@ public class PackageOverviewActivity extends AppCompatActivity {
             public String getValue() {
                 return receiverInfos == null ? "0" : receiverInfos.length + "";
             }
+
+            @Override
+            public int getDetails() {
+                return RECIVER;
+            }
         });
         mListViewData.add(new Divider());
         mListViewData.add(new Section("providers"));
@@ -273,6 +319,11 @@ public class PackageOverviewActivity extends AppCompatActivity {
             @Override
             public String getValue() {
                 return providerInfos == null ? "0" : providerInfos.length + "";
+            }
+
+            @Override
+            public int getDetails() {
+                return PROVIDER;
             }
         });
     }
