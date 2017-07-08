@@ -12,7 +12,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.BaseAdapter;
 import android.widget.ListView;
 
 import com.github.quanzhuo.model.BaseItem;
@@ -274,7 +273,14 @@ public class PackageOverviewActivity extends AppCompatActivity {
             }
         });
         mListViewData.add(new Divider());
-        mListViewData.add(new Section("activities"));
+        mListViewData.add(new Section("Activities"));
+        mListViewData.add(new KeyValuePair("Launcher") {
+            @Override
+            public String getValue() {
+                Intent intent = mPackageManager.getLaunchIntentForPackage(mPackageInfo.packageName);
+                return intent == null ? "N/A" : intent.getComponent().getClassName();
+            }
+        });
         mListViewData.add(new KeyValuePair("totally") {
             @Override
             public String getValue() {
@@ -301,7 +307,7 @@ public class PackageOverviewActivity extends AppCompatActivity {
             }
         });
         mListViewData.add(new Divider());
-        mListViewData.add(new Section("receivers"));
+        mListViewData.add(new Section("Receivers"));
         mListViewData.add(new KeyValuePair("totally") {
             @Override
             public String getValue() {
@@ -314,7 +320,7 @@ public class PackageOverviewActivity extends AppCompatActivity {
             }
         });
         mListViewData.add(new Divider());
-        mListViewData.add(new Section("providers"));
+        mListViewData.add(new Section("Providers"));
         mListViewData.add(new KeyValuePair("totally") {
             @Override
             public String getValue() {

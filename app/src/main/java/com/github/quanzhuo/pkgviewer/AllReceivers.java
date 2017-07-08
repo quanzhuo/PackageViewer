@@ -24,7 +24,6 @@ public class AllReceivers extends AppCompatActivity {
         getPackageName();
         try {
             mActivityInfos = getPackageManager().getPackageInfo(packageName, PackageManager.GET_RECEIVERS).receivers;
-            Toast.makeText(this, mActivityInfos.length + "", Toast.LENGTH_SHORT).show();
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
