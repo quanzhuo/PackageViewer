@@ -6,12 +6,12 @@ import android.graphics.drawable.Drawable;
  * Created by Admin on 2017/7/6.
  */
 
-public class ImageItem implements BaseItem {
+public class Header extends BaseItem {
     private Drawable mDrawable;
     private String mLabel;
     private String mPackageName;
 
-    public ImageItem(Drawable drawable, String label, String packageName) {
+    public Header(Drawable drawable, String label, String packageName) {
         mDrawable = drawable;
         mLabel = label;
         mPackageName = packageName;
@@ -19,7 +19,12 @@ public class ImageItem implements BaseItem {
 
     @Override
     public int getType() {
-        return ITEM_WITH_IMAGE;
+        return HEADER;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return enabled;
     }
 
     public Drawable getDrawable() {

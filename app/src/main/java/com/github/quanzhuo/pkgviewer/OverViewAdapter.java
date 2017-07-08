@@ -10,7 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.github.quanzhuo.model.BaseItem;
-import com.github.quanzhuo.model.ImageItem;
+import com.github.quanzhuo.model.Header;
 import com.github.quanzhuo.model.KeyValuePair;
 import com.github.quanzhuo.model.Section;
 
@@ -56,8 +56,13 @@ public class OverViewAdapter extends BaseAdapter {
     }
 
     @Override
+    public boolean isEnabled(int position) {
+        return mBaseItems.get(position).isEnabled();
+    }
+
+    @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-        ImageItemHolder holder1 = null;
+        HeaderHolder holder1 = null;
         SectionHolder holder2 = null;
         KeyValueHolder holder3 = null;
 
@@ -98,19 +103,19 @@ public class OverViewAdapter extends BaseAdapter {
                 holder3.mKey.setText(pair.getLabel());
                 holder3.mValue.setText(pair.getValue());
                 break;
-            case BaseItem.ITEM_WITH_IMAGE:
+            case BaseItem.HEADER:
                 if (view == null) {
                     LayoutInflater inflater = ((Activity) mContext).getLayoutInflater();
                     view = inflater.inflate(R.layout.package_list_item, null);
-                    holder1 = new ImageItemHolder();
+                    holder1 = new HeaderHolder();
                     holder1.mImageView = view.findViewById(R.id.app_icon);
                     holder1.mLabel = view.findViewById(R.id.app_label);
                     holder1.mPackageName = view.findViewById(R.id.package_name);
                     view.setTag(holder1);
                 } else {
-                    holder1 = (ImageItemHolder) view.getTag();
+                    holder1 = (HeaderHolder) view.getTag();
                 }
-                ImageItem imageItem = (ImageItem) mBaseItems.get(i);
+                Header imageItem = (Header) mBaseItems.get(i);
                 holder1.mImageView.setImageDrawable(imageItem.getDrawable());
                 holder1.mLabel.setText(imageItem.getLabel());
                 holder1.mPackageName.setText(imageItem.getPackageName());
@@ -127,7 +132,7 @@ public class OverViewAdapter extends BaseAdapter {
         TextView mValue;
     }
 
-    static class ImageItemHolder {
+    static class HeaderHolder {
         ImageView mImageView;
         TextView mLabel;
         TextView mPackageName;

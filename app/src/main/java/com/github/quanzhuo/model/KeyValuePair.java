@@ -4,7 +4,7 @@ package com.github.quanzhuo.model;
  * Created by Admin on 2017/7/6.
  */
 
-public abstract class KeyValuePair implements BaseItem {
+public abstract class KeyValuePair extends BaseItem {
     private static final int NO_DETAILS = 0;
     public static final int ACTIVITY = 1;
     public static final int RECIVER = 2;
@@ -14,6 +14,16 @@ public abstract class KeyValuePair implements BaseItem {
 
     public KeyValuePair(String label) {
         mLabel = label;
+    }
+
+    public KeyValuePair (String label, boolean enabled) {
+        mLabel = label;
+        this.enabled = enabled;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return enabled;
     }
 
     public String getLabel() {

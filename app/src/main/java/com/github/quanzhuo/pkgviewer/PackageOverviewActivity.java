@@ -16,7 +16,7 @@ import android.widget.ListView;
 
 import com.github.quanzhuo.model.BaseItem;
 import com.github.quanzhuo.model.Divider;
-import com.github.quanzhuo.model.ImageItem;
+import com.github.quanzhuo.model.Header;
 import com.github.quanzhuo.model.KeyValuePair;
 import com.github.quanzhuo.model.Section;
 
@@ -143,7 +143,7 @@ public class PackageOverviewActivity extends AppCompatActivity {
     }
 
     private void initDataSet() {
-        mListViewData.add(new ImageItem(mApplicationInfo.loadIcon(mPackageManager),
+        mListViewData.add(new Header(mApplicationInfo.loadIcon(mPackageManager),
                 mApplicationInfo.loadLabel(mPackageManager).toString(),
                 mPackageInfo.packageName));
         mListViewData.add(new Divider());
@@ -281,7 +281,7 @@ public class PackageOverviewActivity extends AppCompatActivity {
                 return intent == null ? "N/A" : intent.getComponent().getClassName();
             }
         });
-        mListViewData.add(new KeyValuePair("totally") {
+        mListViewData.add(new KeyValuePair("totally", true) {
             @Override
             public String getValue() {
                 return activityInfos == null ? "0" : activityInfos.length + "";
@@ -294,7 +294,7 @@ public class PackageOverviewActivity extends AppCompatActivity {
         });
         mListViewData.add(new Divider());
         mListViewData.add(new Section("Services"));
-        mListViewData.add(new KeyValuePair("totally") {
+        mListViewData.add(new KeyValuePair("totally", true) {
 
             @Override
             public String getValue() {
@@ -308,7 +308,7 @@ public class PackageOverviewActivity extends AppCompatActivity {
         });
         mListViewData.add(new Divider());
         mListViewData.add(new Section("Receivers"));
-        mListViewData.add(new KeyValuePair("totally") {
+        mListViewData.add(new KeyValuePair("totally", true) {
             @Override
             public String getValue() {
                 return receiverInfos == null ? "0" : receiverInfos.length + "";
@@ -321,7 +321,7 @@ public class PackageOverviewActivity extends AppCompatActivity {
         });
         mListViewData.add(new Divider());
         mListViewData.add(new Section("Providers"));
-        mListViewData.add(new KeyValuePair("totally") {
+        mListViewData.add(new KeyValuePair("totally", true) {
             @Override
             public String getValue() {
                 return providerInfos == null ? "0" : providerInfos.length + "";
