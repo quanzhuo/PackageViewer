@@ -6,4 +6,5 @@
     <string name="all_services">All Services</string>
     <string name="all_receivers">All Receivers</string>
     <string name="all_providers">All Providers</string>
+    <string name="search_menu_item">Search</string>
 </resources>
